@@ -18,7 +18,7 @@ public class PushToTalk implements Runnable {
     /**
      * play a beep sound by using Resources ( Singleton ) class to get the push-to-talk sound
      */
-    public void playSound() {
+    private void playSound() {
         try {
            
             AudioInputStream audioInputStream = Resources.getInstance().getSound();
