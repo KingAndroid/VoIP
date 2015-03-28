@@ -6,6 +6,8 @@
 package GUI;
 
 import Resources.Resources;
+import java.awt.Desktop;
+import java.awt.Image;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -16,6 +18,8 @@ import java.net.URL;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import voice_client.Driver;
 
@@ -61,6 +65,9 @@ public class GUI extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         userName = new javax.swing.JTextField();
         saveUserName = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        userManualClick = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -217,7 +224,7 @@ public class GUI extends javax.swing.JFrame {
                                 .addComponent(hotKeyField, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(saveButton)))
-                        .addContainerGap(181, Short.MAX_VALUE))
+                        .addContainerGap(183, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -250,6 +257,36 @@ public class GUI extends javax.swing.JFrame {
         );
 
         jTabbedPane2.addTab("Settings", jPanel2);
+
+        userManualClick.setText("User Manual");
+        userManualClick.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                userManualClickActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("               \"Vobitax\" is a simple Voice Over Internet Protocol application. ");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(141, 141, 141)
+                .addComponent(userManualClick, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(userManualClick, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(60, 60, 60))
+        );
+
+        jTabbedPane2.addTab("About", jPanel4);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -349,11 +386,21 @@ public class GUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jTabbedPane2MouseClicked
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-            
+              loadIcon();
               loadGlobal(); 
               loadHotKey();
     }//GEN-LAST:event_formWindowOpened
 
+    private void userManualClickActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userManualClickActionPerformed
+        Resources.getInstance().openUserManual();
+    }//GEN-LAST:event_userManualClickActionPerformed
+    private void loadIcon(){
+       
+            String IconURL =  Resources.getInstance().getIconJFrame();
+            ImageIcon icon = new ImageIcon(IconURL);
+            Image myImg = icon.getImage();
+            this.setIconImage(myImg);
+    }
     /**
      * @param args the command line arguments
      */
@@ -399,9 +446,11 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
@@ -410,6 +459,7 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JTextField portField;
     private javax.swing.JButton saveButton;
     private javax.swing.JButton saveUserName;
+    private javax.swing.JButton userManualClick;
     private javax.swing.JTextField userName;
     // End of variables declaration//GEN-END:variables
 }

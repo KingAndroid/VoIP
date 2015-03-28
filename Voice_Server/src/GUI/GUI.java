@@ -8,13 +8,16 @@ package GUI;
 import UDP.RoomExecutor;
 import Componenets.User;
 import ObjectStream.ObjectStreamServer;
+import Resources.Resources;
 
 
 import java.awt.Component;
+import java.awt.Image;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -53,6 +56,11 @@ public class GUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Server");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -134,6 +142,15 @@ public class GUI extends javax.swing.JFrame {
          Thread guiThread = new Thread(new ObjectStreamServer(jTree1,portNum));
             guiThread.start();
     }//GEN-LAST:event_jButton1ActionPerformed
+    private void loadIcon(){
+         String IconURL =  Resources.getInstance().getIconJFrame();
+         ImageIcon icon = new ImageIcon(IconURL);
+         Image myImg = icon.getImage();
+         this.setIconImage(myImg);
+    }
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        loadIcon();
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
