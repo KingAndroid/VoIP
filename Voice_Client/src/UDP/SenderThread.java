@@ -9,6 +9,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
+import static voice_client.Driver.roomHashTag;
 /**
  *
  * @Author : Ofir Attia
@@ -93,7 +94,7 @@ public class SenderThread extends Thread {
             microphone.start();
             int bytesRead = 0;
             byte[] soundData = new byte[200];
-            
+           
             try {
 
                 while (true) {
@@ -109,14 +110,19 @@ public class SenderThread extends Thread {
                         System.out.println("Mute...");
                         wait();
                     }
+                    byte[] group = roomHashTag.getBytes();
                     System.out.println("Reading....");
                     bytesRead = microphone.read(soundData, 0, soundData.length);
                     System.out.println("Bytes Read : "+bytesRead);
-
+                      
                     if (bytesRead >= 0) {
-                        soundDataCompressed = compress(soundData);
+                        soundDataCompressed = (soundData);
+                        byte[] c = new byte[group.length + soundDataCompressed.length];
+                        System.arraycopy(group, 0, c, 0, group.length);
+                        System.arraycopy(soundDataCompressed, 0, c, group.length, soundDataCompressed.length);
+                        
                         DatagramPacket output
-                                = new DatagramPacket(soundDataCompressed, soundDataCompressed.length);//, server, port
+                                = new DatagramPacket(c, c.length);//, server, port
 
                         socket.send(output);
                     }

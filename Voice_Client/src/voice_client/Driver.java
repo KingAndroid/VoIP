@@ -39,7 +39,7 @@ import org.jnativehook.NativeHookException;
  * @Date : 5/3/2015
  */
 public class Driver implements Runnable {
-
+    public static String roomHashTag = "#1";
     /**
      * host address
      */
@@ -163,7 +163,7 @@ public class Driver implements Runnable {
                     String[] partsCheck = selectedNode.toString().split("m");
                     if(!partsCheck[0].equals("Roo")){System.out.println("no room");return;}
                     // when the user switch rooms we will close the current conversation.
-                    ConversationObject.stop(); 
+                    //***ConversationObject.stop(); 
                     // send leave message to the server that the user left the room.
                     ObjectReceiverClient.leaveRoom(currentRoom);
                     // Example Room3 will be splitted to Room and 3
@@ -177,20 +177,21 @@ public class Driver implements Runnable {
                     ObjectReceiverClient.joinRoom(portN);
                     // update the current class attribute in the current room.
                     currentRoom = Integer.parseInt(parts[1]);
+                    roomHashTag = "#"+currentRoom;
                     // create new conversation - initial SenderThread and ReceiverThread
-                    ConversationObject = new ConversationExecutorUDP(host, port + portN);
+                    //***ConversationObject = new ConversationExecutorUDP(host, port + portN);
                     // update the key listener with the new conversation
-                    GlobalHotKey.setCE(ConversationObject); 
+                    //GlobalHotKey.setCE(ConversationObject); 
                     // update the window listener with the new conversation
-                    FrameHandler.setCE(ConversationObject);  
+                    //FrameHandler.setCE(ConversationObject);  
                     // update the mutecheckbox with the new conversation
-                    MIH.setCO(ConversationObject);
+                    //MIH.setCO(ConversationObject);
                     // update the push to talk listener with the new conversation
-                    PTS.setHK(GlobalHotKey);
+                    //PTS.setHK(GlobalHotKey);
                     // set the new conversation in thread
-                    Thread chat = new Thread(ConversationObject);
+                    //Thread chat = new Thread(ConversationObject);
                     // start the new conversation.
-                    chat.start();                                                   
+                    //chat.start();                                                   
                     System.out.println("New Conversation has started");
 
                 }

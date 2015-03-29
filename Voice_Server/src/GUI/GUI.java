@@ -135,10 +135,10 @@ public class GUI extends javax.swing.JFrame {
         int portNum = Integer.parseInt(portField.getText());
         int roomNumbers = 5;
        
-        for(int i=1;i<=roomNumbers;i++){
-            Thread echoThread = new Thread(new RoomExecutor(i,portNum+i,jTextArea1,jTree1));
+        //for(int i=1;i<=roomNumbers;i++){
+            Thread echoThread = new Thread(new RoomExecutor(1,portNum+1,jTextArea1,jTree1));
             echoThread.start();
-        }
+        //}
          Thread guiThread = new Thread(new ObjectStreamServer(jTree1,portNum));
             guiThread.start();
     }//GEN-LAST:event_jButton1ActionPerformed

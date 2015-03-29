@@ -17,10 +17,12 @@ import javax.swing.tree.TreeModel;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.DataFormatException;
 
 /**
  *
@@ -85,7 +87,7 @@ public class RoomListener implements Runnable {
      * hold unique list of sockets - for broadcasting
      */
     HashMap<Integer, InetAddress> map = new HashMap<>();
-
+    HashMap<Integer, String> Groups = new HashMap<>();
     /**
      *
      * @param port
@@ -113,7 +115,7 @@ public class RoomListener implements Runnable {
     /**
      * broadcasting the packets to each user in the room
      */
-    public void serviceClients() {
+    public void serviceClients() throws DataFormatException {
 
         // Create a buffer large enough for incoming packets
         byte[] buffer = new byte[BUFSIZE];
@@ -126,8 +128,19 @@ public class RoomListener implements Runnable {
                 socket.receive(packet);
                 // update sockets 
                 map.put(packet.getPort(), packet.getAddress());
+                System.out.println("Add client: "+packet.getPort()+" to users list");
+
+                //byte[] unCompressed = decompress(packet.getData());
+                byte[] group = Arrays.copyOfRange(packet.getData(), 0,2);
+                byte[] p = Arrays.copyOfRange(packet.getData(), 2,packet.getData().length-1);
+                
+                System.out.println("String Group : "+new String(group).toString());
+                String groupString = new String(group).toString();
+                Groups.put(packet.getPort(), groupString);
+                System.out.println("Add client: "+packet.getPort()+" to group : "+groupString);
                 // broadcasting the packet
-                broad(packet);
+                 
+                broad(p,packet.getPort(),groupString);
             } catch (IOException ioe) {
                 System.err.println("Error : " + ioe);
             }
@@ -138,7 +151,11 @@ public class RoomListener implements Runnable {
     @Override
     public synchronized void run() {
 
-        serviceClients();
+        try {
+            serviceClients();
+        } catch (DataFormatException ex) {
+            //Logger.getLogger(RoomListener.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
     /**
@@ -217,6 +234,36 @@ public class RoomListener implements Runnable {
                 this.socket.send(msgPacket);
                 //serverSocket.send(msgPacket);
                 System.out.println("Send packet to: "+((Integer)pair.getKey()).toString()+" and port: "+((InetAddress)pair.getValue()).toString());
+            } catch (IOException ex) {
+                Logger.getLogger(RoomListener.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }
+    private void broad(byte[] packet,int port,String group) {
+        System.out.println("Broadcast");
+        Iterator it = Groups.entrySet().iterator();
+        while (it.hasNext()) {
+            try {
+                
+                HashMap.Entry pair = (HashMap.Entry) it.next();
+                if(!pair.getValue().equals(group)){
+                    System.out.println("Groups not the same: "+pair.getValue().toString()+ " and current group is: "+group);
+                    continue;
+                }
+                
+                InetAddress clientDataInetAddress =(InetAddress) map.get(pair.getKey());
+                DatagramPacket msgPacket = new DatagramPacket(packet,
+                        packet.length, clientDataInetAddress, (Integer) pair.getKey());
+                //System.out.println("prepare packet from : "+packet.getAddress() +" and port: "+packet.getPort()+" size of packet: "+packet.getLength());
+
+                if (((Integer)port).equals((Integer) pair.getKey())) {
+                    System.out.println("packet of this socket, continue");
+                    continue;
+                }
+                this.socket.send(msgPacket);
+                //serverSocket.send(msgPacket);
+                System.out.println("Send packet to: "+((Integer)pair.getKey()).toString()+" and port: "+(clientDataInetAddress).toString()+" in group : "+pair.getValue());
             } catch (IOException ex) {
                 Logger.getLogger(RoomListener.class.getName()).log(Level.SEVERE, null, ex);
             }

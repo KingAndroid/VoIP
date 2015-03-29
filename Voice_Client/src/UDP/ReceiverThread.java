@@ -129,7 +129,7 @@ class ReceiverThread extends Thread {
                     if (dp.getLength() >= 0 && muteIncoming.get() == false) {
                         System.out.println("Received data" + dp.getAddress() + " " + dp.getPort() + " size packet: " + dp.getLength());
                          
-                        byte[] soundData = decompress(dp.getData());
+                        byte[] soundData = (dp.getData());
                         inSpeaker.write(soundData, 0,soundData.length);
 
                     }
